@@ -5,6 +5,12 @@ const testApi = (req, res) => {
     })
 }
 
+const handleRegister = async(req, res) => {
+    console.log("req: ", req.body);
+    
+}
+
 module.exports = {
-    testApi
+    testApi,
+    handleRegister
 }
