@@ -45,11 +45,23 @@ const handleRegister = async(req, res) => {
 }
 
 const handleLogin = async(req, res) => {
-    console.log("req from react: ", req.body);
-    return res.status(200).json({
-        message: 'OK',
-        data: 'test api login'
-    })
+    try {
+      let data = await loginRegisterService.handleUserLogin(req.body)
+        return res.status(200).json({
+            EM: data.EM, //err message
+            EC: data.EC, //err code
+            DT: data.DT, //data
+        })
+    } catch (error) {
+        console.log("error: ", error);
+        return res.status(500).json({
+            EM: 'error from server', //err message
+            EC: '-1', //err code
+            DT: '', //data
+        })
+    }
+
+    
 }
 
 module.exports = {
