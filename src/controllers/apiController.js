@@ -1,12 +1,5 @@
 import loginRegisterService from "../services/loginRegisterService"
 
-const testApi = (req, res) => {
-    return res.status(200).json({
-        message: 'OK',
-        data: 'test api'
-    })
-}
-
 const handleRegister = async(req, res) => {
     try {
         if(!req.body.email || !req.body.phone || !req.body.password) {
@@ -68,7 +61,6 @@ const handleLogin = async(req, res) => {
 }
 
 module.exports = {
-    testApi,
     handleRegister,
     handleLogin
 }
