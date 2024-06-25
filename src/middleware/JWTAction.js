@@ -32,11 +32,11 @@ if (nonSecurePaths.includes(req.path)) return next();
   let cookies = req.cookies;
 
   if (cookies?.jwt) {
-    console.log("cookies?.jwt: ", cookies.jwt);
     let token = cookies.jwt;
     let decoded = verifyToken(token);
     if (decoded) {
       req.user = decoded;
+      req.token = token;
       next();
     } else {
       return res.status(401).json({
@@ -55,13 +55,11 @@ if (nonSecurePaths.includes(req.path)) return next();
 };
 
 const checkUserPermission = (req, res, next) => {
-if (nonSecurePaths.includes(req.path)) return next();
+if (nonSecurePaths.includes(req.path) || req.path === "/account") return next();
   if (req.user) {
     let email = req.user.email;
     let roles = req.user.groupWithRoles.Roles;
-    console.log("roles: ", roles);
     let currentUrl = req.path;
-    console.log("currentUrl: ", currentUrl);
     if (!roles || roles.length === 0) {
       return res.status(403).json({
         EC: -1,

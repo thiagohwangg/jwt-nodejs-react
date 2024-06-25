@@ -1,9 +1,9 @@
 import db from "../models/";
 import bcrypt from "bcryptjs";
 import { Op } from "sequelize";
-require('dotenv').config()
-import {getGroupWithRoles} from './JWTService'
-import {createJWT} from '../middleware/JWTAction'
+require("dotenv").config();
+import { getGroupWithRoles } from "./JWTService";
+import { createJWT } from "../middleware/JWTAction";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -59,7 +59,7 @@ const registerNewUser = async (rawUserData) => {
       username: rawUserData.username,
       password: hashPassword,
       phone: rawUserData.phone,
-      groupId: 4
+      groupId: 4,
     });
 
     return {
@@ -84,22 +84,23 @@ const handleUserLogin = async (rawData) => {
     let user = await db.User.findOne({
       where: {
         [Op.or]: [{ email: rawData.valueLogin }, { phone: rawData.valueLogin }],
-        },
-        });
+      },
+    });
     if (user) {
       let isCorrectPassword = checkPassword(rawData.password, user.password);
       if (isCorrectPassword) {
-        // let token = 
+        // let token =
 
         // test roles
-       let groupWithRoles =  await getGroupWithRoles(user)
-       let payload = {
-        email: user.email,
-        groupWithRoles,
-        expiresIn: process.env.JWT_EXPIRES_IN
-       }
+        let groupWithRoles = await getGroupWithRoles(user);
+        let payload = {
+          email: user.email,
+          groupWithRoles,
+          username: user.username,
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        };
 
-       let token = createJWT(payload)
+        let token = createJWT(payload);
         return {
           EM: "OK",
           EC: 0,
@@ -107,7 +108,7 @@ const handleUserLogin = async (rawData) => {
             access_token: token,
             groupWithRoles,
             email: user.email,
-            username: user.username
+            username: user.username,
           },
         };
       }
@@ -131,5 +132,5 @@ module.exports = {
   handleUserLogin,
   hashUserPassword,
   checkEmailExist,
-  checkPhoneExist
+  checkPhoneExist,
 };
