@@ -74,11 +74,29 @@ const deleteFunc = async(req, res) => {
   }
 };
 
-
+const getRoleByGroup = async(req, res) => {
+  try {
+    let id = req.params.groupId
+    let data = await roleApiService.getRoleByGroup(id)
+    return res.status(200).json({
+      EM: data.EM, //err message
+      EC: data.EC, //err code
+      DT: data.DT, //data
+    });
+    } catch (error) {
+      console.log("error: ", error);
+      return res.status(500).json({
+        EM: "error from server", //err message
+        EC: "-1", //err code
+        DT: "", //data
+      });
+    }
+}
 
 module.exports = {
   readFunc,
   createFunc,
   updateFunc,
-  deleteFunc
+  deleteFunc,
+  getRoleByGroup
 };
